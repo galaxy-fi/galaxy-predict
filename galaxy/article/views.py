@@ -7,7 +7,7 @@ def article_list(request):
     articles = Article.objects.filter(end_time__gt=timezone.now()).order_by('end_time')
     ret = []
     if request.user.is_authenticated:
-        articles = Article.objects.all()
+        articles = Article.objects.filter(end_time__gt=timezone.now()).order_by('end_time')
         for article in articles:
             if request.user in article.voter.all():
                 ret.append(article.id)

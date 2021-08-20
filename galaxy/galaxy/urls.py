@@ -15,9 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from article import views
 
 urlpatterns = [
+    path('', views.article_list),
     path('admin/', admin.site.urls),
     path('article/', include('article.urls')),
     path('account/', include('account.urls')),
+    path('', include('metamask_web3_auth.urls')),
 ]

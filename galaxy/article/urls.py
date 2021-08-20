@@ -1,4 +1,5 @@
 from django.urls import path
+from web3auth import urls as web3auth_urls
 from . import views
 
 urlpatterns = [

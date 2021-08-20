@@ -42,6 +42,8 @@ INSTALLED_APPS = [
 
     'article',
     'account',
+
+    'metamask_web3_auth',
 ]
 
 MIDDLEWARE = [
@@ -132,3 +134,11 @@ STATICFILES_DIRS = ( os.path.join('static'), )
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'auth.User'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'metamask_web3_auth.backend.Web3Backend',
+]
+
+WEB3AUTH_USER_ADDRESS_FIELD = 'username'
+LOGIN_REDIRECT_URL = '/'

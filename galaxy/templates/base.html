@@ -13,71 +13,152 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'css/article.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
+    <!-- Latest JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+    <!-- Tether - a requirement for Bootstrap tooltips -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.2.0/js/tether.min.js"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 </head>
 <body class="bg-light">
-    <nav id="galaxy_gnb" class="navbar navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="/article/">
-                <img id="galaxy_logo" src="{% static 'img/logo.png' %}" class="d-inline-block align-center" alt="">
-                <p id="logo_name" class="d-inline-block">Galaxy.fi</p>
-            </a>
-
-            <div class="collapse navbar-collapse" id="navbarText">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#">Markets</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Portfolio</a>
-                    </li>
-                </ul>
-            </div>
-
-            <form class="form-inline">
-                {% if user.is_authenticated %}
-                    <button class="btn btn-outline-secondary" type="button">Hello! {{ request.user.username }}  // GToken : {{ request.user.info.token_amount }}</button>
-                    <a href="{% url 'signout' %}"><button class="btn btn-outline-secondary" type="button">Sign out</button></a>
-                {% else %}
-                    <a href="{% url 'signin' %}"><button class="btn btn-outline-secondary" type="button">Sign in</button></a>
-                    <a href="{% url 'signup' %}"><button class="btn btn-outline-secondary" type="button">Sign up</button></a>
-                {% endif %}
-            </form>
-        </div>
-    </nav>
-
-    <div class="content container" style="min-height: 400px;">
-        <div id="upper_banner" class="row">
-            <div class="col-md-12">
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                {% block content %}
-                {% endblock %}
-            </div>
-        </div>
-
-        <a href="{% url 'article_new' %}" class="float">
-            <i class="fa fa-plus my-float"></i>
+<nav id="galaxy_gnb" class="navbar navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="/article/">
+            <img id="galaxy_logo" src="{% static 'img/logo.png' %}" class="d-inline-block align-center" alt="">
+            <p id="logo_name" class="d-inline-block">Galaxy.fi</p>
         </a>
 
-        <div class="label-container">
-            <div class="label-text">Write Article</div>
-            <i class="fa fa-play label-arrow"></i>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Markets</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Portfolio</a>
+                </li>
+            </ul>
+        </div>
+
+        <form class="form-inline">
+            {% if user.is_authenticated %}
+            <button class="btn btn-outline-secondary" type="button">Hello! {{ request.user.username }}  // GToken : {{ request.user.info.token_amount }}</button>
+            <a href="{% url 'signout' %}"><button class="btn btn-outline-secondary" type="button">Sign out</button></a>
+            {% else %}
+            <button class="btn btn-outline-secondary" type="button" onclick="startLogin()">Metamask Sign in</button>
+            <button class="btn btn-outline-secondary" type="button" onclick="startSignUp()">Metamask Sign up</button>
+            <a href="{% url 'signin' %}"><button class="btn btn-outline-secondary" type="button">Sign in</button></a>
+            <a href="{% url 'signup' %}"><button class="btn btn-outline-secondary" type="button">Sign up</button></a>
+            {% endif %}
+        </form>
+    </div>
+</nav>
+
+<div class="content container" style="min-height: 400px;">
+    <div id="upper_banner" class="row">
+        <div class="col-md-12">
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="text-center text-lg-start bg-light text-muted">
-        <!-- Copyright -->
-        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
-        © 2021 Copyright:
-            <a class="text-reset fw-bold" href="#">Galaxy.fi</a>
+    <div class="row">
+        <div class="col-md-12">
+            {% block content %}
+            {% endblock %}
         </div>
-        <!-- Copyright -->
-    </footer>
-    <!-- Footer -->
+    </div>
 
+    <a href="{% url 'article_new' %}" class="float">
+        <i class="fa fa-plus my-float"></i>
+    </a>
+
+    <div class="label-container">
+        <div class="label-text">Write Article</div>
+        <i class="fa fa-play label-arrow"></i>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-light text-muted">
+    <!-- Copyright -->
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+        © 2021 Copyright:
+        <a class="text-reset fw-bold" href="#">Galaxy.fi</a>
+    </div>
+    <!-- Copyright -->
+</footer>
+<!-- Footer -->
+
+{% block javascript %}
+<!-- Your stuff: Third-party javascript libraries go here -->
+<script src="{% static 'web3auth/js/web3auth.js' %}"></script>
+
+<script>
+    async function startLogin() {
+        if (window.ethereum) {
+            window.web3 = new Web3(ethereum);
+            try {
+                // Request account access if needed
+                await ethereum.enable();
+                // Acccounts now exposed
+
+                var login_url = "/login_api/";
+                web3Login(login_url, console.log, console.log, console.log, console.log, console.log, async function (resp) {
+                    window.location.replace(resp.redirect_url);
+                });
+
+            } catch (error) {
+                // User denied account access...
+                console.log(error)
+            }
+        }
+        // Legacy dapp browsers...
+        else if (window.web3) {
+            window.web3 = new Web3(web3.currentProvider);
+            // Acccounts always exposed
+            var login_url = "/login_api/";
+            web3Login(login_url, console.log, console.log, console.log, console.log, console.log, function (resp) {
+                window.location.replace(resp.redirect_url);
+            });
+        }
+        // Non-dapp browsers...
+        else {
+            alert('web3 missing');
+            console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+        }
+    }
+    async function startSignUp() {
+        if (window.ethereum) {
+            window.web3 = new Web3(ethereum);
+            try {
+                // Request account access if needed
+                await ethereum.enable();
+                // Acccounts now exposed
+
+                var signup_url = "/signup_api/";
+                web3SignUp(signup_url);
+            } catch (error) {
+                // User denied account access...
+                console.log(error)
+            }
+        }
+        // Legacy dapp browsers...
+        else if (window.web3) {
+            window.web3 = new Web3(web3.currentProvider);
+            // Acccounts always exposed
+            var signup_url = "/signup_api/";
+                web3SignUp(signup_url);
+        }
+        // Non-dapp browsers...
+        else {
+            alert('web3 missing');
+            console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+        }
+    }
+</script>
+{% endblock javascript %}
 </body>
 </html>
