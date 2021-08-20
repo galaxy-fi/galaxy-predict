@@ -14,6 +14,7 @@ from metamask_web3_auth.forms import LoginForm, SignupForm
 from metamask_web3_auth.utils import recover_to_addr
 from metamask_web3_auth.settings import app_settings
 from django.contrib.auth.models import User
+from article.models import UserInfo
 
 import json
 
@@ -62,11 +63,14 @@ def login_api(request):
                     error = _("Can't find a user for the provided signature with address {address}").format(
                         address=address)
 
-                    # user = User(username=address, password=address)
-                    # user.save()
-                    # login(request, user, 'web3auth.backend.Web3Backend')
+                    user = User(username=address, password=address)
+                    user.save()
 
-                    return JsonResponse({'success': False, 'error': error})
+                    user_info = UserInfo(user=user, rating=5.0)
+                    user_info.save()
+                    login(request, user, 'web3auth.backend.Web3Backend')
+
+                    return JsonResponse({'success': True, 'redirect_url': get_redirect_url(request)})
             else:
                 return JsonResponse({'success': False, 'error': json.loads(form.errors.as_json())})
 
