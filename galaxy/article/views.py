@@ -46,3 +46,11 @@ def article_vote(request, id):
             request.user.info.save()
             request.user.save()
             return redirect('article_list')
+
+def article_detail(request, id):
+    article = Article.objects.get(pk=id)
+
+    ctx = {
+        'article': article,
+    }
+    return render(request, 'article_detail.html', ctx)

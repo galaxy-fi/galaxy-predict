@@ -35,3 +35,10 @@
     float:left;
     width:70%;
 }
+
+.card-author {
+    overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+
+}

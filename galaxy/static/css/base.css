@@ -127,3 +127,23 @@ a.float:hover + div.label-container{
   visibility: visible;
   opacity: 1;
 }
+
+.upper-banner-title {
+    color: white;
+    font-size:2.5em;
+    font-weight: bold;
+    display: block;
+    text-align: center;
+}
+
+.upper-banner-title-wrapper {
+    margin: 0 auto;
+    margin-top:100px;
+}
+
+.left-upper-text {
+    position: absolute;
+    color: white;
+    font-size: 1.2em;
+    margin-top: 10px;
+}

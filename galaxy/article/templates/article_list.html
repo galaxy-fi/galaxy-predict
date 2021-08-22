@@ -9,29 +9,31 @@
                 {% else %}
                     <div class="short-flag flag-text">SHORT</div>
                 {% endif %}
-                <div class="card">
-                    <div class="card-body">
-                        <div class="left-card-contents">
-                            <h5 class="card-author" style="font-size:1.0rem;">Author : {{article.author.username}}</h5>
-                            <p>Rating : {{ article.author.info.rating }}</p>
-                            <p>Vote : {{ article.voted_token_amount }}</p>
-                        </div>
-                        <div class="right-card-contents">
-                            <h5 class="card-title">{{article.title}}</h5>
-                            <p class="card-text">{{article.description}}</p>
-                            {% if article.id in ret %}
-                                <button class="btn btn-secondary" style="float:right;margin-left:10px;">Already Voted!</button>
-                            {% else %}
-                                <form class="galaxy-form" action="/article/vote/{{article.id}}/" method='POST'>
-                                    {% csrf_token %}
-                                    <button class="btn btn-primary" type="submit" style="float:right;margin-left:10px;">Vote!</button>
-                                    <input type='number' name='amount' style="width:50px; float:right; margin-left:10px; margin-top:4px;" />
-                                    <span style="float:right; margin-top:6px;">GToken</span>
-                                </form>
-                            {% endif %}
+                <a href="/article/detail/{{article.id}}" style="color: black;">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="left-card-contents">
+                                <h5 class="card-author" style="font-size:1.0rem;">Author : {{article.author.username}}</h5>
+                                <p>Rating : {{ article.author.info.rating }}</p>
+                                <p>Vote : {{ article.voted_token_amount }}</p>
+                            </div>
+                            <div class="right-card-contents">
+                                <h5 class="card-title">{{article.title}}</h5>
+                                <p class="card-text">{{article.sub_title}}</p>
+                                {% if article.id in ret %}
+                                    <button class="btn btn-secondary" style="float:right;margin-left:10px;">Already Voted!</button>
+                                {% else %}
+                                    <form class="galaxy-form" action="/article/vote/{{article.id}}/" method='POST'>
+                                        {% csrf_token %}
+                                        <button class="btn btn-primary" type="submit" style="float:right;margin-left:10px;">Vote!</button>
+                                        <input type='number' name='amount' style="width:50px; float:right; margin-left:10px; margin-top:4px;" />
+                                        <span style="float:right; margin-top:6px;">GToken</span>
+                                    </form>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         {% endfor %}
     </div>

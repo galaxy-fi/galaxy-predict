@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row" style="margin-bottom: 100px;">
+        <h1>
+            {% if article.direction_type == "L" %}
+                <span style="color:#44f656;">[LONG]</span>
+            {% else %}
+                <span style="color:#e30f0f;">[SHORT]</span>
+            {% endif %}
+            {{ article.title }}
+        </h1>
+        <h5>{{ article.sub_title }}</h5>
+        <h5 class="card-author">Author : {{article.author.username}}</h5>
+        <h5>Rating : {{ article.author.info.rating }}</h5>
+        <h5>Vote : {{ article.voted_token_amount }}</h5>
+
+        <div style="margin-top: 10px; margin-bottom: 10px; border: 1px black solid; border-radius: 10px; padding:15px;">
+            {{ article.description|safe }}
+        </div>
+
+        <a href="/article/" style="color:black;">Back to article list</a>
+    </div>
+{% endblock %}

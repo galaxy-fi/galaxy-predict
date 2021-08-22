@@ -1,12 +1,13 @@
 from django.db import models
 from django.conf import settings
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class Article(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="written_article")
     title = models.TextField()
     sub_title = models.TextField()
-    description = models.TextField()
+    description = RichTextUploadingField(blank=True, null=True)
     created_time = models.DateTimeField(auto_now_add=True)
     end_time = models.DateTimeField(null=True)
     voted_token_amount = models.FloatField(default=0.0)

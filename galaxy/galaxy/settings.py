@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'account',
 
     'metamask_web3_auth',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
@@ -142,3 +144,8 @@ AUTHENTICATION_BACKENDS = [
 
 WEB3AUTH_USER_ADDRESS_FIELD = 'username'
 LOGIN_REDIRECT_URL = '/'
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
